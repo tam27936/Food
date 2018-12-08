@@ -1,0 +1,100 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace TestSQL
+{
+    public partial class WebForm3 : System.Web.UI.Page
+    {
+        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["DB"].ConnectionString);
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+            SelectFood(2);
+
+            Class1 aaa = new Class1();
+            GVMenu.DataSource = aaa.getclass();
+            GVMenu.DataBind();
+
+
+            TextBox4.Visible = false;
+            TextBox5.Visible = false;
+            TextBox6.Visible = false;
+
+            if (Session["member_name"] != null)
+            {
+
+
+                //TextBox1.Text = Session["member_name"].ToString();
+
+                SqlCommand se = new SqlCommand("select * from member where member_name='" + Session["member_name"] + "'", con);
+                con.Open();
+                SqlDataReader reader = se.ExecuteReader();
+                if (reader.Read())
+                {
+                    LbId.Text = reader["Member_id"].ToString();
+                    TxtFirstname.Text = reader["Member_myname"].ToString();
+                    TxtLastname.Text = reader["Member_lastname"].ToString();
+                }
+                con.Close();
+            }
+        }
+
+        protected void BtnEdit_Click(object sender, EventArgs e)
+        {
+            TextBox6.Visible = true;
+            TextBox5.Visible = true;
+            TextBox4.Visible = true;
+
+        }
+
+        protected void BtnSub_Click(object sender, EventArgs e)
+        {
+            con.Open();
+            SqlCommand ed = new SqlCommand("update member set member_myname='" + TextBox4.Text + "',member_lastname='" + TextBox5.Text + "', member_email='" + TextBox6.Text + "' where member_name='" + Session["member_name"] + "'", con);
+            ed.ExecuteNonQuery();
+            con.Close();
+            TextBox6.Visible = true;
+            TextBox5.Visible = true;
+            TextBox4.Visible = true;
+            TextBox4.Text = "";
+            TextBox5.Text = "";
+            TextBox6.Text = "";
+        }
+
+        protected void BtnOut_Click(object sender, EventArgs e)
+        {
+            Response.RedirectPermanent("webform1.aspx");
+            //Session.Clear();
+            
+        }
+        
+        public void SelectFood(int d)
+        {
+            Class1 a = new Class1();
+            var b = a.getclass2();
+            var c = b.Rows[d];
+            var e = Int32.Parse(c["order_unit"].ToString());
+            for (int i = 0; i <= e; i++)
+            {
+                UnitFood1.Items.Add(i.ToString());
+            }
+            //var q = b.Rows[1];
+            //var u = Int32.Parse(q["order_unit"].ToString());
+            //for (int o = 0; o <= u; o++)
+            //{
+            //    UnitFood2.Items.Add(o.ToString());
+            //}
+
+
+        }
+        
+    }
+}

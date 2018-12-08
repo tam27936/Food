@@ -1,0 +1,211 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace TestSQL
+{
+    public partial class WebForm3 : System.Web.UI.Page
+    {
+        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["DB"].ConnectionString);
+
+       
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+            SelectFood();
+
+            Class1 aaa = new Class1();
+            GVMenu.DataSource = aaa.getclass();
+            GVMenu.DataBind();
+
+            Class1 a1 = new Class1();
+            GVMenu0.DataSource = a1.getclass3();
+            GVMenu0.DataBind();
+
+            Class1 a2 = new Class1();
+            GVMenu1.DataSource = a2.getclass4();
+            GVMenu1.DataBind();
+
+
+            
+
+            if (Session["member_name"] != null)
+            {
+
+
+                //TextBox1.Text = Session["member_name"].ToString();
+
+                SqlCommand se = new SqlCommand("select * from member where member_name='" + Session["member_name"] + "'", con);
+                con.Open();
+                SqlDataReader reader = se.ExecuteReader();
+                if (reader.Read())
+                {
+                    LbId.Text = reader["Member_id"].ToString();
+                    LbFirtName.Text = reader["Member_myname"].ToString();
+                    LbLastName.Text = reader["Member_lastname"].ToString();
+                    LbPoint.Text = reader["Member_point"].ToString();
+                }
+                con.Close();
+            }
+
+            foreach (GridViewRow row in GVMenu.Rows)
+            {
+                
+                if (row.RowType == DataControlRowType.DataRow)
+                {
+                    //var DropDownList = row.FindControl("DropDownList1") as DropDownList;
+                    var DropDownList = GVMenu.Rows[0].FindControl("DropDownList1") as DropDownList;
+                    DropDownList.DataSource = new List<string>() { "0", "1", "2", "3", "4" };
+                    DropDownList.DataBind();
+                }
+
+            }
+          
+        }
+
+        protected void BtnEdit_Click(object sender, EventArgs e)
+        {
+            Response.RedirectPermanent("Profile.aspx");
+
+        }
+
+        
+
+        protected void BtnOut_Click(object sender, EventArgs e)
+        {
+            Response.RedirectPermanent("HomePage.aspx");
+            //Session.Clear();
+            
+        }
+        
+        public void SelectFood()
+        {
+            Class1 a = new Class1();
+            var b = a.getclass2();
+            var c = b.Rows[0];
+            var e = Int32.Parse(c["order_unit"].ToString());
+            for (int i = 0; i <= e; i++)
+            {
+                UnitFood1.Items.Add(i.ToString());
+            }
+
+            var q = b.Rows[1];
+            var u = Int32.Parse(q["order_unit"].ToString());
+            for (int o = 0; o <= u; o++)
+            {
+                UnitFood2.Items.Add(o.ToString());
+            }
+
+            var q1 = b.Rows[2];
+            var u1 = Int32.Parse(q1["order_unit"].ToString());
+            for (int o = 0; o <= u1; o++)
+            {
+                UnitFood3.Items.Add(o.ToString());
+            }
+
+            var q2 = b.Rows[3];
+            var u2 = Int32.Parse(q2["order_unit"].ToString());
+            for (int o = 0; o <= u2; o++)
+            {
+                UnitFood4.Items.Add(o.ToString());
+            }
+
+            var q3 = b.Rows[4];
+            var u3 = Int32.Parse(q3["order_unit"].ToString());
+            for (int o = 0; o <= u3; o++)
+            {
+                UnitFood5.Items.Add(o.ToString());
+            }
+
+            var q4 = b.Rows[5];
+            var u4 = Int32.Parse(q4["order_unit"].ToString());
+            for (int o = 0; o <= u4; o++)
+            {
+                UnitFood6.Items.Add(o.ToString());
+            }
+
+            var q5 = b.Rows[6];
+            var u5 = Int32.Parse(q5["order_unit"].ToString());
+            for (int o = 0; o <= u5; o++)
+            {
+                UnitFood7.Items.Add(o.ToString());
+            }
+
+            var q6 = b.Rows[7];
+            var u6 = Int32.Parse(q6["order_unit"].ToString());
+            for (int o = 0; o <= u6; o++)
+            {
+                UnitFood8.Items.Add(o.ToString());
+            }
+
+            var q7 = b.Rows[8];
+            var u7 = Int32.Parse(q7["order_unit"].ToString());
+            for (int o = 0; o <= u7; o++)
+            {
+                UnitFood9.Items.Add(o.ToString());
+            }
+
+            var q8 = b.Rows[9];
+            var u8 = Int32.Parse(q8["order_unit"].ToString());
+            for (int o = 0; o <= u8; o++)
+            {
+                UnitFood10.Items.Add(o.ToString());
+            }
+
+            var q9 = b.Rows[10];
+            var u9 = Int32.Parse(q9["order_unit"].ToString());
+            for (int o = 0; o <= u9; o++)
+            {
+                UnitFood11.Items.Add(o.ToString());
+            }
+
+            var q10 = b.Rows[11];
+            var u10 = Int32.Parse(q10["order_unit"].ToString());
+            for (int o = 0; o <= u10; o++)
+            {
+                UnitFood12.Items.Add(o.ToString());
+            }
+
+        }
+
+
+
+        protected void GVMenu_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            //if (e.Row.RowType == DataControlRowType.Header)
+            //{
+            //    foreach (TableCell i in e.Row.Cells)
+            //    {
+            //        i.Style.Add("Width", "500px");
+            //    }
+            //}
+           
+           
+
+
+        }
+
+
+
+        //protected void GVMenu_RowDataBound(object sender, GridViewRowEventArgs e) //ใส่ text ไปใน dropdownlist
+        //{
+        //    string cities = "mmm,ccc,nnn,hhh"; 
+        //    string[] arr = cities.Split(',');
+        //    if (e.Row.RowType == DataControlRowType.DataRow)
+        //    {
+        //        DropDownList ddl = (DropDownList)e.Row.FindControl("DropDownList1");
+        //        foreach(string colname in arr)
+        //        {
+        //            ddl.Items.Add(new ListItem(colname));
+        //        }
+        //    }
+        //}
+    }
+}
